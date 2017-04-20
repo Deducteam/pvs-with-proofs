@@ -1,0 +1,33 @@
+Dependencies:
+- PVS 6.0 (http://pvs.csl.sri.com/download.shtml)
+- Nasalib 6.0.10 (https://github.com/nasa/pvslib)
+- Dedukti 2.4 (http://dedukti.gforge.inria.fr/)
+- MetiTarski 2;4 (https://www.cl.cam.ac.uk/~lp15/papers/Arith/)
+
+Installation:
+- Install all dependencies
+- Clone this project into a new directory
+- Add the following line to ~/.bashrc
+export PVS_WITH_PROOFS_PATH= full path of the directory where the files have been placed
+- Run make
+
+To test the generation of proof certificates (.proof files) with the ints library
+- Go to the directory ints
+- Run pvs, go to the buffer *pvs*, run (load-pvs-with-proofs)
+- Run (pvs-with-proofs-dir)
+- The proofs are printed as ".proof" files
+
+To test the export to Dedukti and MetiTarski with the induction theory
+- Go to the directory induction
+- Run pvs, go to the buffer *pvs*, run (load-pvs-with-proofs)
+- Run (pvs-with-proofs "induction" 'nat_sum t t)
+- The dedukti certificates is induction.dk, the input for MetiTarski is induction.p
+- To check the dedukti certificate: dkcheck induction.dk
+- To prove the generated assumptions with MetiTarski: metit induction.p
+
+To test an arbitrary theory
+- Go to the directory containing this theory
+- Run pvs, go to the buffer *pvs*, run (load-pvs-with-proofs)
+- Run either
+   * (pvs-with-proofs "theory-name") to generate certificates for all theorems in the theory
+   * (pvs-with-proofs "theory-name" 'theorem-name) for a specific theorem

@@ -1,0 +1,11 @@
+*.proof
+*.prf
+*~
+*.dko
+*.dk
+*.l64fasl
+!logic.dk
+ints/pvsbin/
+ints/.pvscontext
+induction/pvsbin/
+induction/.pvscontext

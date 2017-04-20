@@ -1,0 +1,236 @@
+#NAME logic.
+type: Type.
+
+lambda: (type -> type) -> type.
+def apply: type -> type -> type.
+
+[t: type, u : type] apply (lambda t) u --> t u.
+
+pair: type -> type -> type.
+
+tuple3: type -> type -> type -> type.
+
+prf: type -> Type.
+TRUE: type.
+FALSE : type.
+AND: type.
+OR: type.
+IMPLIES: type.
+NOT: type.
+FORALL : (type -> type) -> type.
+EXISTS : (type -> type) -> type.
+IFF: type.
+def eq: type.
+def if: type.
+
+0: type.
+1: type.
+2: type.
+def plus: type.
+times: type.
+
+RHead: A: type ->
+       (prf (apply NOT A) -> prf FALSE) ->
+       prf A.
+
+Rimply: A: type -> B: type ->
+		   prf (apply NOT (apply IMPLIES (pair A B))) ->
+		   (prf (apply NOT (apply NOT A)) -> prf (apply NOT B) -> prf FALSE) ->
+		   prf FALSE.
+
+RNotNot: A: type ->
+	 prf (apply NOT (apply NOT (apply NOT A))) ->
+	 (prf (apply NOT A) -> prf FALSE) ->
+	 prf FALSE.
+
+ROr: A: type -> B: type ->
+		prf (apply NOT (apply OR (pair A B))) ->
+		(prf (apply NOT A) -> prf (apply NOT B) -> prf FALSE) ->
+		prf FALSE.
+
+ROr2: A: type -> B: type ->
+		prf (apply NOT (apply OR (pair A B))) ->
+		(prf (apply NOT B) -> prf (apply NOT A) -> prf FALSE) ->
+		prf FALSE.
+
+RAnd: A: type -> B: type ->
+		prf (apply NOT (apply AND (pair A B))) ->
+		(prf (apply NOT A) -> prf FALSE) ->
+		(prf (apply NOT B) -> prf FALSE) ->
+		prf FALSE.
+
+RAxiom: A: type ->
+	prf (apply NOT A) ->
+	prf (apply NOT (apply NOT A)) -> prf FALSE.
+
+RNotAnd: A: type -> B: type ->
+		prf (apply NOT (apply NOT (apply AND (pair A B)))) ->
+		(prf (apply NOT (apply NOT A)) -> prf (apply NOT (apply NOT B)) -> prf FALSE) ->
+		prf FALSE.
+
+RNotOr: A: type -> B: type ->
+		prf (apply NOT (apply NOT (apply OR (pair A B)))) ->
+		(prf (apply NOT (apply NOT A)) -> prf FALSE) ->
+		(prf (apply NOT (apply NOT B)) -> prf FALSE) ->
+		prf FALSE.
+
+RTrue: prf (apply NOT TRUE) ->
+       prf FALSE.
+
+RNotFalse: prf (apply NOT (apply NOT FALSE)) ->
+       prf FALSE.
+
+RNotForall: P : (type -> type) -> te : type ->
+				  prf (apply NOT (apply NOT (FORALL P))) ->
+				  (prf (apply NOT (apply NOT (P te))) -> prf FALSE) ->
+				  prf FALSE.
+
+RExists: P : (type -> type) -> te : type ->
+			       prf (apply NOT (EXISTS P)) ->
+			       (prf (apply NOT (P te)) -> prf FALSE) ->
+			       prf FALSE.
+
+RNotImplication: A: type -> B: type ->
+		prf (apply NOT (apply NOT (apply IMPLIES (pair A B)))) ->
+		(prf (apply NOT (apply NOT B)) -> prf FALSE) ->
+		(prf (apply NOT A) -> prf FALSE) ->
+		prf FALSE.
+
+RNotExists: P : (type -> type) ->
+	    prf (apply NOT (apply NOT (EXISTS P))) ->
+	    (te : type -> prf (apply NOT (apply NOT (P te))) -> prf FALSE) ->
+	    prf FALSE.
+
+RForall: P : (type -> type) ->
+	 prf (apply NOT (FORALL P)) ->
+	 (te : type -> prf (apply NOT (P te)) -> prf FALSE) ->
+	 prf FALSE.
+
+RHole: A: type -> prf A.
+
+RCut: A: type ->
+      (prf (apply NOT A) -> prf FALSE) ->
+      (prf (apply NOT (apply NOT A)) -> prf FALSE) ->
+      prf FALSE.
+
+RNotTrue: (prf (apply NOT (apply NOT TRUE)) -> prf FALSE) ->
+	  prf FALSE.
+
+RNotFalse2: prf (apply NOT FALSE).
+
+RNotImplication2: A: type -> B: type ->
+		prf (apply IMPLIES (pair A B)) ->
+		(prf (apply NOT B)) ->
+		(prf (apply NOT A) -> prf FALSE) ->
+		prf FALSE.
+
+RNotImplication3: B: type ->
+		prf B ->
+		(prf (apply NOT B)) ->
+		prf FALSE.
+
+RNotOr2: A: type ->
+	 B: type ->
+	 (prf (apply NOT A)) ->
+	 (prf (apply NOT B)) ->
+	 prf (apply NOT (apply OR (pair A B))).
+
+RTrans: a: type -> b: type -> c: type ->
+		prf (apply NOT (apply eq (pair a c))) ->
+		(prf (apply NOT (apply eq (pair a b))) -> prf FALSE) ->
+		(prf (apply NOT (apply eq (pair b c))) -> prf FALSE) ->
+		prf FALSE.
+
+RLeibniz10: A: (type -> type) ->
+	    u : type ->
+	    v: type ->
+	    prf (apply NOT (A v)) ->
+	    (prf (apply NOT (A u)) -> prf FALSE) ->
+	    (prf (apply NOT (apply eq (pair u v))) -> prf FALSE) ->
+            prf FALSE.
+
+
+RCongruence: A: (type -> type) ->
+	     u : type ->
+	     v: type ->
+	     (prf (apply NOT (apply eq (pair (A u) (A v))))) ->
+	     (prf (apply NOT (apply eq (pair u v))) -> prf FALSE) ->
+             prf FALSE.
+
+RExtForall: A: (type -> type) ->
+	    B : (type -> type) ->
+	  prf (apply NOT (apply eq (pair (FORALL A) (FORALL B)))) ->
+	  (x: type -> prf (apply NOT (apply eq (pair (A x) (B x)))) -> prf FALSE) ->
+          prf FALSE.
+
+RIfThenCongruence: A: type ->
+		   then1 : type ->
+		   then2 : type ->
+		   else : type ->
+		   prf (apply NOT (apply eq
+			       (pair (apply if (tuple3 A then1 else))
+				     (apply if (tuple3 A then2 else))))) ->
+		   (prf (apply NOT (apply NOT A)) ->
+		    prf (apply NOT (apply eq (pair then1 then2))) -> prf FALSE) ->
+		   prf FALSE.
+
+RIfElseCongruence: A: type ->
+		   then : type ->
+		   else1 : type ->
+		   else2 : type ->
+		   prf (apply NOT (apply eq
+			       (pair (apply if (tuple3 A then else1))
+				     (apply if (tuple3 A then else2))))) ->
+		   (prf (apply NOT A) ->
+		    prf (apply NOT (apply eq (pair else1 else2))) -> prf FALSE) ->
+		   prf FALSE.
+
+
+RExtProp: A: type -> B : type ->
+	  prf (apply NOT (apply eq (pair A B))) ->
+	  (prf (apply NOT (apply IFF (pair A B))) -> prf FALSE) ->
+          prf FALSE.
+
+RIFF: A: type -> B : type ->
+	  prf (apply NOT (apply IFF (pair A B))) ->
+	  (prf (apply NOT (apply IMPLIES (pair A B))) -> prf FALSE) ->
+	  (prf (apply NOT (apply IMPLIES (pair B A))) -> prf FALSE) ->
+          prf FALSE.
+
+RIF: A: type -> B : type -> C : type ->
+	  prf (apply NOT (apply if (tuple3 A B C))) ->
+	  (prf (apply NOT (apply IMPLIES (pair A B))) -> prf FALSE) ->
+	  (prf (apply NOT (apply IMPLIES (pair (apply NOT A) C))) -> prf FALSE) ->
+          prf FALSE.
+
+RNotIF: A: type -> B : type -> C : type ->
+	  prf (apply NOT (apply NOT (apply if (tuple3 A B C)))) ->
+	  (prf (apply NOT (apply NOT (apply AND (pair A B)))) -> prf FALSE) ->
+	  (prf (apply NOT (apply NOT (apply AND (pair (apply NOT A) C)))) -> prf FALSE) ->
+          prf FALSE.
+
+
+RNotIFF: A: type -> B : type ->
+	  prf (apply NOT (apply NOT (apply IFF (pair A B)))) ->
+	  (prf (apply NOT (apply NOT (apply IMPLIES (pair A B)))) ->
+	   prf (apply NOT (apply NOT (apply IMPLIES (pair B A)))) -> prf FALSE) ->
+          prf FALSE.
+
+Rimplication3 : A : type  ->
+		B : type ->
+		(prf A -> prf B) ->
+		prf (apply IMPLIES (pair A B)).
+
+
+RNatInduction: prf (apply NOT
+		     (FORALL
+		       (p: type =>
+			(apply IMPLIES
+			   (pair (apply AND
+				    (pair (apply p 0)
+					  (FORALL (j:type=>
+						   (apply IMPLIES
+						      (pair (apply p j)
+							    (apply p (apply plus (pair j 1)))))))))
+				 (FORALL (i:type=>(apply p i)))))))) ->
+	       prf FALSE.
