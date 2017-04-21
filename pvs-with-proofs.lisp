@@ -103,7 +103,5 @@
   (let* ((test-paths (directory "*.pvs"))
 	 (test-names (sort (mapcar #'pathname-name test-paths) #'string<)))
     (dolist (test-name test-names)
-	 (format out "~a~%" test-name)
-	 (pvs-with-proofs test-name nil out)
-	 (format out "~%~%"))))
+	 (pvs-with-proofs test-name))))
 

@@ -1,11 +1,11 @@
 Dependencies:
 - PVS 6.0 (http://pvs.csl.sri.com/download.shtml)
-- Nasalib 6.0.10 (https://github.com/nasa/pvslib)
-- Dedukti 2.4 (http://dedukti.gforge.inria.fr/)
-- MetiTarski 2;4 (https://www.cl.cam.ac.uk/~lp15/papers/Arith/)
+- Nasalib 6.0.10 (https://github.com/nasa/pvslib, development version)
+- Dedukti 2.5 (http://dedukti.gforge.inria.fr/)
+- MetiTarski 2.4 (https://www.cl.cam.ac.uk/~lp15/papers/Arith/)
 
 Installation:
-- Install all dependencies
+- Install all dependencies, ensure that PVS, Dedukti, and MetiTarski are indexed in the PATH
 - Clone this project into a new directory
 - Add the following line to ~/.bashrc
 export PVS_WITH_PROOFS_PATH= full path of the directory where the files have been placed
